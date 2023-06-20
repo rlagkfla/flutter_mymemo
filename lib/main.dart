@@ -58,12 +58,16 @@ class _HomePageState extends State<HomePage> {
                   itemCount: memoList.length, // memoList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
                     Memo memo = memoList[index]; // index에 해당하는 memo 가져오기
+                    // bool pin = memo.isPinned;
                     return ListTile(
                       // 메모 고정 아이콘
                       leading: IconButton(
-                        icon: Icon(CupertinoIcons.pin),
+                        icon: Icon(memo.isPinned
+                            ? CupertinoIcons.pin_fill
+                            : CupertinoIcons.pin),
                         onPressed: () {
-                          print('$memo : pin 클릭 됨');
+                          // print('$memo : pin 클릭 됨');
+                          memoService.updatePinMemo(index: index);
                         },
                       ),
                       // 메모 내용 (최대 3줄까지만 보여주도록)
