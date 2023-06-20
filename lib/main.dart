@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                   itemCount: memoList.length, // memoList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
                     Memo memo = memoList[index]; // index에 해당하는 memo 가져오기
-                    // bool pin = memo.isPinned;
+
                     return ListTile(
                       // 메모 고정 아이콘
                       leading: IconButton(
@@ -66,7 +66,6 @@ class _HomePageState extends State<HomePage> {
                             ? CupertinoIcons.pin_fill
                             : CupertinoIcons.pin),
                         onPressed: () {
-                          // print('$memo : pin 클릭 됨');
                           memoService.updatePinMemo(index: index);
                         },
                       ),
@@ -76,6 +75,9 @@ class _HomePageState extends State<HomePage> {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      trailing: Text(memo.updatedAt == null
+                          ? ""
+                          : memo.updatedAt.toString().substring(0, 19)),
                       onTap: () async {
                         // 아이템 클릭시
                         await Navigator.push(
@@ -95,7 +97,9 @@ class _HomePageState extends State<HomePage> {
             child: Icon(Icons.add),
             onPressed: () async {
               // + 버튼 클릭시 메모 생성 및 수정 페이지로 이동
-              memoService.createMemo(content: '');
+              memoService.createMemo(
+                content: '',
+              );
               await Navigator.push(
                 context,
                 MaterialPageRoute(
