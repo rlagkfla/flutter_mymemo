@@ -119,7 +119,12 @@ class _HomePageState extends State<HomePage> {
                   ? memoService.deleteMemo(
                       index: memoService.memoList.length - 1)
                   : Navigator.maybePop(context);
+              // 첫번째 정답
               // if (memoList[memoService.memoList.length - 1].content.isEmpty) {
+              //   memoService.deleteMemo(index: memoList.length - 1);
+              // }
+              // 두번째 정답
+              // if(memoList.last.content.isEmpty){
               //   memoService.deleteMemo(index: memoList.length - 1);
               // }
             },
