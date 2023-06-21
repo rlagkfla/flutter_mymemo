@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'main.dart';
 
-import 'package:intl/intl.dart';
-
 // Memo 데이터의 형식을 정해줍니다. 추후 isPinned, updatedAt 등의 정보도 저장할 수 있습니다.
 class Memo {
   String content;
@@ -27,27 +25,23 @@ class Memo {
     return {
       'content': content,
       'isPinned': isPinned,
-      // 'updateAt': updateAt,
-      'updatedAt': updatedAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(), // string으로 넣어줘야 함
     };
   }
 
   factory Memo.fromJson(json) {
     return Memo(
       content: json['content'],
-      isPinned: json['isPinned'], // or => ?? false
+      isPinned: json['isPinned'], // or ?? false
       // ??연산자 사용 이유: memoservice에서 loadmemolist를 제일 먼저 실행
       // -> loadmemolist에서 memo.fromjson을 불러오는데 ispinned에서 null값을 가져와 에러 발생하기 때문
       // 근데 isPinned 초기값을 false로 미리 지정해두면 null값이 들어오지 않으므로 사용할 필요 없음
-      // updatedAt: json['updateAt'] ?? '', // null값을 공백으로 지정
-      updatedAt:
-          json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt']),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt']), // ISO-8601 포맷의 스트링을 파싱
     );
   }
 }
-
-// DateTime now = DateTime.now();
-// DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
 
 // Memo 데이터는 모두 여기서 관리
 class MemoService extends ChangeNotifier {
@@ -61,11 +55,8 @@ class MemoService extends ChangeNotifier {
   ];
 
   createMemo({required String content}) {
-    Memo memo = Memo(
-        content: content,
-        isPinned: false,
-        // updatedAt: now.toString(), //formatter.format(now)
-        updatedAt: DateTime.now());
+    Memo memo =
+        Memo(content: content, isPinned: false, updatedAt: DateTime.now());
     memoList.add(memo);
     notifyListeners(); // Consumer<MemoService>의 builder 부분을 호출해서 화면 새로고침
     saveMemoList();
@@ -74,7 +65,6 @@ class MemoService extends ChangeNotifier {
   updateMemo({required int index, required String content}) {
     Memo memo = memoList[index];
     memo.content = content;
-    // memo.updatedAt = now.toString();
     memo.updatedAt = DateTime.now();
     notifyListeners();
     saveMemoList();

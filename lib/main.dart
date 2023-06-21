@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
                             ? CupertinoIcons.pin_fill
                             : CupertinoIcons.pin),
                         onPressed: () {
+                          // print('$memo : pin 클릭 됨');
                           memoService.updatePinMemo(index: index);
                         },
                       ),
@@ -89,6 +90,12 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                         // 해당 메모가 비어있으면 삭제하는 로직
+                        memo.content == ''
+                            ? memoService.deleteMemo(index: index)
+                            : Navigator.maybePop(context);
+                        // if (memo.content.isEmpty) {
+                        //   memoService.deleteMemo(index: index);
+                        // }
                       },
                     );
                   },
@@ -97,9 +104,7 @@ class _HomePageState extends State<HomePage> {
             child: Icon(Icons.add),
             onPressed: () async {
               // + 버튼 클릭시 메모 생성 및 수정 페이지로 이동
-              memoService.createMemo(
-                content: '',
-              );
+              memoService.createMemo(content: '');
               await Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -109,6 +114,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
               // 해당 메모가 비어있으면 삭제하는 로직
+              Memo memo = memoList[memoService.memoList.length - 1];
+              memo.content == ''
+                  ? memoService.deleteMemo(
+                      index: memoService.memoList.length - 1)
+                  : Navigator.maybePop(context);
+              // if (memoList[memoService.memoList.length - 1].content.isEmpty) {
+              //   memoService.deleteMemo(index: memoList.length - 1);
+              // }
             },
           ),
         );
